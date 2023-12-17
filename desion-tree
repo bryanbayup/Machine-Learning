@@ -1,0 +1,52 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split #MEMBAGI DATA MENJADI DATA UJI DAN LATIH
+from sklearn.tree import DecisionTreeClassifier #MENDEFINISIKAN DECISION TREE
+from sklearn.metrics import accuracy_score #EVALUSI MODEL DAN AKURASI
+from sklearn.impute import SimpleImputer
+
+#MEMBACA FILE Tree_Data.csv
+Tree = pd.read_csv('Tree_Data.csv')
+Tree.info() #MELIHAT INFORMASI DATA
+Tree.head() #mELIHAT 5 DATA TERATAS
+
+#MENGHAPUS DATA YANG TIDAK PENTING
+#CARA 1
+columns_to_drop = ['No', 'Plot', 'Subplot', 'Light_Cat', 'Soil', 'Adult', 'Sterile', 'Conspecific', 'Myco', 'SoilMyco', 'PlantDate', 'Harvest', 'Alive']
+Tree.drop(columns=columns_to_drop, inplace=True)
+#CARA 2
+Tree.drop('No',axis=1,inplace=True)
+#MEMISAHKAN ATRIBUT DAN LABEL
+#CARA 1
+X = Tree.loc[:, Tree.columns != 'Species']
+y = Tree['Species']
+#CARA 2
+X = Tree[['No', 'Plot', 'Subplot']]
+y = Tree['Species']
+#MEMBAGI DATA MENJADI DATA UJI DAN DATA LATIH
+# Membagi dataset menjadi data latih & data uji
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=123)
+#BILA ADA DATA KOSONG NAN
+imputer = SimpleImputer(strategy='mean')
+X_train_imputed = imputer.fit_transform(X_train)
+X_test_imputed = imputer.transform(X_test)
+#MEMBUAT MOEL DECISION TREE
+tree_model = DecisionTreeClassifier()
+#MELATIH MODEL DENGAN MENGGUNAKAN DATA LATIH
+tree_model = tree_model.fit(X_train_imputed/X_train, y_train)
+#EVALUASI DAN AKURASI
+y_pred = tree_model.predict(X_test)
+acc_secore = round(accuracy_score(y_pred, y_test), 3) #3 ARTINYA jumlah angka desimal yang akan disertakan dalam hasil pembulatan dari nilai akurasi
+print('Accuracy: ', acc_secore)
+#PREDIKSI MODEL
+print(tree_model.predict([[URUTAN APA YANG INGIN DI PREDIKSI CONTOH 333.3, 22,3, 18]])[INDEKS DARI LABEL CONTOH UNTUK INDEKS NOL[0]])
+#INI CONTOH PREDIKSI JUGA
+print(tree_model.predict([[6.2, 3.4, 5.4, 2.3]])[0])
+#TAMBAHAN BILA INGIN MELAKUKAN VISUALISASI NANTI AKAN MUNCUL FILE DOT DAN TINGGAL DI CONVERT MENJADI PNG
+from sklearn.tree import export_graphviz
+export_graphviz(
+    tree_model,
+    out_file = "iris_tree.dot",
+    feature_names = ['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm'],
+    class_names = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica' ],
+    rounded= True,
+    filled =True)
