@@ -29,6 +29,18 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_
 imputer = SimpleImputer(strategy='mean')
 X_train_imputed = imputer.fit_transform(X_train)
 X_test_imputed = imputer.transform(X_test)
+#APABILA DATA BUKAN BERUPA ANGKA HARUS DILAKUKAN ONEHOTENCONDER
+print(X.columns) #TAMPILKAN KOLOM
+# Membuat objek OneHotEncoder
+onehot_encoder = OneHotEncoder(sparse=False, drop='first')
+# Melakukan one-hot encoding pada kolom kategorikal ('Discount', 'Free Delivery', 'Purchase')
+X_encoded = pd.DataFrame(onehot_encoder.fit_transform(X[['Discount', 'Free Delivery', 'Purchase']]))
+# Menyertakan nama kolom pada hasil one-hot encoding
+X_encoded.columns = onehot_encoder.get_feature_names_out(['Discount', 'Free Delivery', 'Purchase'])
+# Menggabungkan hasil one-hot encoding dengan DataFrame asli
+X = pd.concat([X, X_encoded], axis=1)
+# Menghapus kolom kategorikal yang sudah di-one-hot encoding
+X.drop(['Discount', 'Free Delivery', 'Purchase'], axis=1, inplace=True)
 #MEMBUAT MOEL DECISION TREE
 tree_model = DecisionTreeClassifier()
 #MELATIH MODEL DENGAN MENGGUNAKAN DATA LATIH
