@@ -1,0 +1,33 @@
+# Import library NumPy untuk manipulasi data numerik
+import numpy as np
+
+# Membuat array NumPy untuk jumlah kamar (bedrooms) dan harga rumah (house_price)
+bedrooms = np.array([1,1,2,2,3,4,4,5,5,5])
+house_price = np.array([15000, 18000, 27000, 34000, 50000, 68000, 65000, 81000,85000, 90000])
+
+# Import library Matplotlib untuk visualisasi data
+import matplotlib.pyplot as plt
+
+# Menggunakan magic command `%matplotlib inline` untuk menampilkan plot secara langsung di notebook
+%matplotlib inline
+
+# Membuat scatter plot untuk menampilkan hubungan antara jumlah kamar dan harga rumah
+plt.scatter(bedrooms, house_price)
+
+# Import class LinearRegression dari library scikit-learn
+from sklearn.linear_model import LinearRegression
+
+# Mengubah dimensi array bedrooms menjadi bentuk yang sesuai untuk digunakan dalam model regresi linear
+bedrooms = bedrooms.reshape(-1, 1)
+
+# Membuat objek LinearRegression
+linreg = LinearRegression()
+
+# Melatih model regresi linear menggunakan metode fit
+linreg.fit(bedrooms, house_price)
+
+# Menampilkan scatter plot
+plt.scatter(bedrooms, house_price)
+
+# Menampilkan garis regresi linear pada plot
+plt.plot(bedrooms, linreg.predict(bedrooms))
