@@ -18,7 +18,7 @@ Tree.drop(columns=columns_to_drop, inplace=True)
 Tree.drop('No',axis=1,inplace=True)
 #MEMISAHKAN ATRIBUT DAN LABEL
 #CARA 1
-X = Tree.loc[:, Tree.columns != 'Species']
+X = Tree.loc[:, Tree.columns != 'Species'] / X = data.drop('Purchase', axis=1) #purchase adalah kolom yg dijadikan label
 y = Tree['Species']
 #CARA 2
 X = Tree[['No', 'Plot', 'Subplot']]
