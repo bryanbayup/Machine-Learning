@@ -23,13 +23,6 @@ y = Tree['Species']
 #CARA 2
 X = Tree[['No', 'Plot', 'Subplot']]
 y = Tree['Species']
-#MEMBAGI DATA MENJADI DATA UJI DAN DATA LATIH
-# Membagi dataset menjadi data latih & data uji
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=123)
-#BILA ADA DATA KOSONG NAN
-imputer = SimpleImputer(strategy='mean')
-X_train_imputed = imputer.fit_transform(X_train)
-X_test_imputed = imputer.transform(X_test)
 #APABILA DATA BUKAN BERUPA ANGKA HARUS DILAKUKAN ONEHOTENCONDER
 print(X.columns) #TAMPILKAN KOLOM
 # Membuat objek OneHotEncoder
@@ -42,6 +35,12 @@ X_encoded.columns = onehot_encoder.get_feature_names_out(['Discount', 'Free Deli
 X = pd.concat([X, X_encoded], axis=1)
 # Menghapus kolom kategorikal yang sudah di-one-hot encoding
 X.drop(['Discount', 'Free Delivery', 'Purchase'], axis=1, inplace=True)
+#MEMBAGI DATA MENJADI DATA UJI DAN DATA LATIH
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=123)
+#BILA ADA DATA KOSONG NAN
+imputer = SimpleImputer(strategy='mean')
+X_train_imputed = imputer.fit_transform(X_train)
+X_test_imputed = imputer.transform(X_test)
 #MEMBUAT MOEL DECISION TREE
 tree_model = DecisionTreeClassifier()
 #MELATIH MODEL DENGAN MENGGUNAKAN DATA LATIH
